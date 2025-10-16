@@ -3,6 +3,7 @@ package com.base.listeners;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import com.base.CRUD_Employee.Employee;
+import com.base.CRUD_Meeting.Meeting;
 
 public class ModalListener extends ListenerAdapter{
     
@@ -61,14 +62,23 @@ public class ModalListener extends ListenerAdapter{
             String date = event.getValue("data").getAsString();
             String startTime = event.getValue("início").getAsString();
             String finishTime = event.getValue("fim").getAsString();
+            try {
+                int idEmployee = 1;
+                    // TODO: handle exception
+                 Meeting meeting = new Meeting(meetingName,description,date,startTime,finishTime,idEmployee);
+                meeting.insertMeeting();
+                Meeting meeting2 =  meeting.searchMeeting();
 
-            System.out.println("===== MEETING FORM DATA =====");
-            System.out.println("Tema: " + meetingName);
-            System.out.println("Descrição: " + description);
-            System.out.println("Data: " + date);
-            System.out.println("Horário de início: " + startTime);
-            System.out.println("Horário de término: " + finishTime);
-            System.out.println("==============================");
+                System.out.println("===== MEETING FORM DATA =====");
+                System.out.println("Tema: " + meeting2.getName());
+                System.out.println("Descrição: " + meeting2.getDescription());
+                System.out.println("Data: " +  meeting2.getDate());
+                System.out.println("Horário de início: " + meeting2.getStartTime());
+                System.out.println("Horário de término: " + meeting2.getEndTime());
+                System.out.println("==============================");
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
 
         event.deferReply().queue();        

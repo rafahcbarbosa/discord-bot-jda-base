@@ -1,11 +1,11 @@
-D:\Documents\Rafael\ExyCode\Base files\Bot\src\main\java\com\base\core\Command.java
-D:\Documents\Rafael\ExyCode\Base files\Bot\src\main\java\com\base\core\Dm.java
-D:\Documents\Rafael\ExyCode\Base files\Bot\src\main\java\com\base\core\Member.java
-D:\Documents\Rafael\ExyCode\Base files\Bot\src\main\java\com\base\core\Server.java
-D:\Documents\Rafael\ExyCode\Base files\Bot\src\main\java\com\base\core\User.java
-D:\Documents\Rafael\ExyCode\Base files\Bot\src\main\java\com\base\infra\BotListener.java
-D:\Documents\Rafael\ExyCode\Base files\Bot\src\main\java\com\base\infra\Main.java
-D:\Documents\Rafael\ExyCode\Base files\Bot\src\main\java\com\base\infra\Source.java
-D:\Documents\Rafael\ExyCode\Base files\Bot\src\main\java\com\base\types\RegisterServerCommand.java
-D:\Documents\Rafael\ExyCode\Base files\Bot\src\main\java\com\base\types\RegisterUserCommand.java
-D:\Documents\Rafael\ExyCode\Base files\Bot\src\main\java\com\base\util\Utils.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/Bot/src/main/java/com/base/infra/BotListener.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/Bot/src/main/java/com/base/infra/Main.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/Bot/src/main/java/com/base/core/User.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/Bot/src/main/java/com/base/util/Utils.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/Bot/src/main/java/com/base/core/Dm.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/Bot/src/main/java/com/base/core/Server.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/Bot/src/main/java/com/base/types/RegisterServerCommand.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/Bot/src/main/java/com/base/core/Member.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/Bot/src/main/java/com/base/infra/Source.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/Bot/src/main/java/com/base/types/RegisterUserCommand.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/Bot/src/main/java/com/base/core/Command.java

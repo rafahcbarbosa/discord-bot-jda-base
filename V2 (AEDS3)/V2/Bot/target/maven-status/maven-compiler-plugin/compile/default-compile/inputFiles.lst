@@ -1,13 +1,20 @@
-C:\Users\rafxb\Desktop\V2(new)\V2\Bot\src\main\java\com\base\core\Main.java
-C:\Users\rafxb\Desktop\V2(new)\V2\Bot\src\main\java\com\base\CRUD_Employee\Arquivo.java
-C:\Users\rafxb\Desktop\V2(new)\V2\Bot\src\main\java\com\base\CRUD_Employee\Employee.java
-C:\Users\rafxb\Desktop\V2(new)\V2\Bot\src\main\java\com\base\CRUD_Employee\EmployeeDAO.java
-C:\Users\rafxb\Desktop\V2(new)\V2\Bot\src\main\java\com\base\CRUD_Employee\Registro.java
-C:\Users\rafxb\Desktop\V2(new)\V2\Bot\src\main\java\com\base\CRUD_Employee\TratamentoExcecao01.java
-C:\Users\rafxb\Desktop\V2(new)\V2\Bot\src\main\java\com\base\forms\Builder.java
-C:\Users\rafxb\Desktop\V2(new)\V2\Bot\src\main\java\com\base\forms\Field.java
-C:\Users\rafxb\Desktop\V2(new)\V2\Bot\src\main\java\com\base\listeners\BotListener.java
-C:\Users\rafxb\Desktop\V2(new)\V2\Bot\src\main\java\com\base\listeners\ModalListener.java
-C:\Users\rafxb\Desktop\V2(new)\V2\Bot\src\main\java\com\base\listeners\ReadyListener.java
-C:\Users\rafxb\Desktop\V2(new)\V2\Bot\src\main\java\com\base\listeners\SlashCommandListener.java
-C:\Users\rafxb\Desktop\V2(new)\V2\Bot\src\main\java\com\base\util\Utils.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/GeneralStructures/Arquivo.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/listeners/BotListener.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/CRUD_Employee/Employee.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/CRUD_Employee/Registro.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/CRUD_Meeting/TratamentoExcecao01.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/listeners/SlashCommandListener.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/listeners/ModalListener.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/CRUD_Meeting/Meeting.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/interfaces/RegistroHashExtensivel.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/forms/Field.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/listeners/ReadyListener.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/forms/Builder.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/CRUD_Employee/TratamentoExcecao01.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/CRUD_Meeting/IndiceMeeting.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/interfaces/Registro.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/util/Utils.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/GeneralStructures/HashExtensivel.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/core/Main.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/CRUD_Employee/EmployeeDAO.java
+/home/fasciani/Estudo/AEDS3/discord-bot-jda-base/V2 (AEDS3)/V2/Bot/src/main/java/com/base/CRUD_Employee/Arquivo.java
