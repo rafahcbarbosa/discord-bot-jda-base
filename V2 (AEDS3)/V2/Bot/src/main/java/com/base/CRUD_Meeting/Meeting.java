@@ -1,27 +1,36 @@
 package com.base.CRUD_Meeting;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.Date;
 
-import javax.xml.crypto.dsig.XMLSignatureFactory;
-import javax.xml.crypto.dsig.dom.DOMSignContext;
-import javax.xml.crypto.dsig.dom.DOMValidateContext;
+import java.io.*;
+import java.util.ArrayList;
 
-
-import com.base.CRUD_Employee.Employee;
-
-import com.base.GeneralStructures.Arquivo;
 import com.base.interfaces.Registro;
+import com.base.GeneralStructures.Arquivo;
+import com.base.GeneralStructures.ArvoreBMais;
 
-import com.base.CRUD_Meeting.IndiceMeeting;
+public class Meeting implements Registro {
 
+    // Arquivo e índice B+ compartilhados entre todas as instâncias
+    private static Arquivo<Meeting, IndiceMeeting, IndiceFk> arqMeetings;
 
-public class Meeting implements Registro{
+    static {
+        try {
+            ArvoreBMais<IndiceFk> arvoreFK = new ArvoreBMais<>(
+                IndiceFk.class.getConstructor(),
+                4,
+                "meeting_fk.idx"
+            );
 
-    public Arquivo<Meeting, IndiceMeeting,IndiceFk> arqMeetings;
+            arqMeetings = new Arquivo<>(
+                "meeting",
+                Meeting.class.getConstructor(),
+                IndiceMeeting.class.getConstructor(),
+                arvoreFK
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private int id;
     private String name;
@@ -30,123 +39,49 @@ public class Meeting implements Registro{
     private String startTime;
     private String endTime;
     private int idEmployee;
-    
-    public Meeting()throws Exception{
-        this(-1,"","","","","",1);
-    }
-    public Meeting(String name,String description,String date, String startTime,String endTime,int idEmployee)throws Exception{
-        this(-1,name,description,date,startTime,endTime,idEmployee);
+
+    public Meeting() {
+        this(-1, "", "", "", "", "", 1);
     }
 
-    public Meeting(int id,String name,String description,String date, String startTime,String endTime,int idEmployee) throws Exception{
-        arqMeetings = new Arquivo<>("Meetings", Meeting.class.getConstructor(),IndiceMeeting.class.getConstructor());
+    public Meeting(String name, String description, String date, String startTime, String endTime, int idEmployee) {
+        this(-1, name, description, date, startTime, endTime, idEmployee);
+    }
+
+    public Meeting(int id, String name, String description, String date, String startTime, String endTime, int idEmployee) {
         this.id = id;
-        this.description = description;
         this.name = name;
+        this.description = description;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.idEmployee = idEmployee;
     }
-    
 
-    /**
-     * @return int return the id
-     */
-    public int getId() {
-        return id;
-    }
+    // Getters e setters ↓↓↓
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setIdEmployee(int id){
-        this.idEmployee = id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    
-    public int getIdEmployee(){
-        return this.idEmployee;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    /**
-     * @param id the id to set
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getDate() { return date; }
+    public void setDate(String date) { this.date = date; }
 
-    /**
-     * @return String return the name
-     */
-    public String getName() {
-        return name;
-    }
+    public String getStartTime() { return startTime; }
+    public void setStartTime(String startTime) { this.startTime = startTime; }
 
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getEndTime() { return endTime; }
+    public void setEndTime(String endTime) { this.endTime = endTime; }
 
-    /**
-     * @return String return the description
-     */
-    public String getDescription() {
-        return description;
-    }
+    public int getIdEmployee() { return idEmployee; }
+    public void setIdEmployee(int idEmployee) { this.idEmployee = idEmployee; }
 
-    /**
-     * @param description the description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
-     * @return String return the date
-     */
-    public String getDate() {
-        return date;
-    }
-
-    /**
-     * @param date the date to set
-     */
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    /**
-     * @return String return the startTime
-     */
-    public String getStartTime() {
-        return startTime;
-    }
-
-    /**
-     * @param startTime the startTime to set
-     */
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    /**
-     * @return String return the endTime
-     */
-    public String getEndTime() {
-        return endTime;
-    }
-
-    /**
-     * @param endTime the endTime to set
-     */
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-    
-
-
+    // Serialização ↓↓↓
     public byte[] toByteArray() throws IOException {
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
 
@@ -161,30 +96,26 @@ public class Meeting implements Registro{
         return baos.toByteArray();
     }
 
-
     public void fromByteArray(byte[] b) throws IOException {
-
         ByteArrayInputStream bais = new ByteArrayInputStream(b);
         DataInputStream dis = new DataInputStream(bais);
 
         this.id = dis.readInt();
-        this.name = dis.readUTF();;
+        this.name = dis.readUTF();
         this.description = dis.readUTF();
         this.date = dis.readUTF();
-        this.startTime= dis.readUTF();
+        this.startTime = dis.readUTF();
         this.endTime = dis.readUTF();
         this.idEmployee = dis.readInt();
+    }
 
+    // CRUD ↓↓↓
+    public boolean insertMeeting() throws Exception {
+        return arqMeetings.create(this,this.idEmployee);
     }
 
     public Meeting searchMeeting() throws Exception {
         return arqMeetings.read(this.id);
-    }
-
-    public boolean insertMeeting() throws Exception {
-
-        
-        return arqMeetings.create(this);
     }
 
     public boolean updateMeeting() throws Exception {
@@ -194,4 +125,10 @@ public class Meeting implements Registro{
     public boolean deleteMeeting() throws Exception {
         return arqMeetings.delete(this.id);
     }
+
+   public ArrayList<Meeting> searchByFK(int fkValue) throws Exception {
+    // chama diretamente o método do Arquivo que já retorna ArrayList<Meeting>
+        return arqMeetings.searchByFK(fkValue);
+    }
+
 }

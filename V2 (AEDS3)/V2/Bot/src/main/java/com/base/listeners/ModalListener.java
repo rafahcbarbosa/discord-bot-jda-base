@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import com.base.CRUD_Employee.Employee;
 import com.base.CRUD_Meeting.Meeting;
+import java.util.ArrayList;
 
 public class ModalListener extends ListenerAdapter{
     
@@ -66,18 +67,36 @@ public class ModalListener extends ListenerAdapter{
                 int idEmployee = 1;
                     // TODO: handle exception
                  Meeting meeting = new Meeting(meetingName,description,date,startTime,finishTime,idEmployee);
+                 Meeting meeting2 = new Meeting(meetingName,description,date,startTime,finishTime,idEmployee);
+                 Meeting meeting3 = new Meeting(meetingName,description,date,startTime,finishTime,idEmployee);
                 meeting.insertMeeting();
-                Meeting meeting2 =  meeting.searchMeeting();
+                
+                ArrayList<Meeting> meetings4 = meeting.searchByFK(1);
 
-                System.out.println("===== MEETING FORM DATA =====");
-                System.out.println("Tema: " + meeting2.getName());
-                System.out.println("Descrição: " + meeting2.getDescription());
-                System.out.println("Data: " +  meeting2.getDate());
-                System.out.println("Horário de início: " + meeting2.getStartTime());
-                System.out.println("Horário de término: " + meeting2.getEndTime());
-                System.out.println("==============================");
+                for (Meeting meeting5: meetings4) {
+                    System.out.println("===== MEETING FORM DATA =====");
+                    System.out.println("Tema: " + meeting5.getName());
+                    System.out.println("Descrição: " + meeting5.getDescription());
+                    System.out.println("Data: " +  meeting5.getDate());
+                    System.out.println("Horário de início: " + meeting5.getStartTime());
+                    System.out.println("Horário de término: " + meeting5.getEndTime());
+                    System.out.println("==============================");
+                
+                }
+                    // usa meeting5 normalmente
+                    System.out.println("===== MEETING FORM DATA =====");
+                    System.out.println("Tema: " + meetings4.get(0).getName());
+                    System.out.println("Descrição: " + meeting2.getDescription());
+                    System.out.println("Data: " +  meeting2.getDate());
+                    System.out.println("Horário de início: " + meeting2.getStartTime());
+                    System.out.println("Horário de término: " + meeting2.getEndTime());
+                    System.out.println("==============================");
+                
+                System.out.println("teste");
+                
             } catch (Exception e) {
                 System.out.println(e);
+                System.out.println("teste");
             }
         }
 

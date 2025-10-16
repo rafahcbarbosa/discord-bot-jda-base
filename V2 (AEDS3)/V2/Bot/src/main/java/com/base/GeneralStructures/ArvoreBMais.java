@@ -572,6 +572,7 @@ public class ArvoreBMais<T extends RegistroArvoreBMais<T>> {
         int diminuido;
 
         // Testa se o registro não foi encontrado na árvore, ao alcançar uma folha
+        
         // inexistente (filho de uma folha real)
         if (pagina == -1) {
             diminuiu = false;

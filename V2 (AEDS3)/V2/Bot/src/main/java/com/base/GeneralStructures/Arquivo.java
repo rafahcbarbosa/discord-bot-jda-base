@@ -9,136 +9,179 @@ import java.util.ArrayList;
 import com.base.interfaces.Registro;
 import com.base.interfaces.RegistroArvoreBMais;
 import com.base.interfaces.RegistroHashExtensivel;
-import com.base.GeneralStructures.HashExtensivel;
-import com.base.CRUD_Meeting.IndiceMeeting;
-import com.base.CRUD_Meeting.Meeting;
 
 public class Arquivo<
         T extends Registro,
         I extends RegistroHashExtensivel<I>,
         F extends RegistroArvoreBMais<F>
-    >  {
-    private static final int TAM_CABECALHO = 4;
+    > {
+
+    private static final int TAM_CABECALHO = 12; // 4 (ID) + 8 (lista de excluídos)
     private RandomAccessFile arquivo;
     private String nomeArquivo;
     private Constructor<T> construtor;
     private HashExtensivel<I> indice;
     private Constructor<I> construtorIndice;
-     protected ArvoreBMais<F> indiceFK;
+    private ArvoreBMais<F> indiceFK; // índice B+ genérico para FK
 
+    // -------------------------------------------
+    // CONSTRUTOR GENÉRICO
+    // -------------------------------------------
+    public Arquivo(String nomeArquivo,
+                   Constructor<T> construtor,
+                   Constructor<I> construtorIndice,
+                   ArvoreBMais<F> indiceFK) throws Exception {
 
-    public Arquivo(String nomeArquivo, Constructor<T> construtor, Constructor<I> construtorIndice) throws Exception {
-        File diretorio = new File("./dados");
-        if (!diretorio.exists()) diretorio.mkdir();
+        // Criar diretório base
+        File dirBase = new File("./dados");
+        if (!dirBase.exists()) dirBase.mkdir();
 
-        diretorio = new File("./dados/" + nomeArquivo);
-        if (!diretorio.exists()) diretorio.mkdir();
+        // Diretório específico para o arquivo
+        File dirArquivo = new File("./dados/" + nomeArquivo);
+        if (!dirArquivo.exists()) dirArquivo.mkdir();
 
+        // Inicializações básicas
         this.nomeArquivo = "./dados/" + nomeArquivo + "/" + nomeArquivo + ".db";
         this.construtor = construtor;
         this.arquivo = new RandomAccessFile(this.nomeArquivo, "rw");
+        this.construtorIndice = construtorIndice;
+        this.indiceFK = indiceFK;
 
-         this.construtorIndice = construtorIndice;
-            this.indice = new HashExtensivel<>(
+        // Cria o índice hash extensível genérico
+        this.indice = new HashExtensivel<>(
             construtorIndice,
             3,
             "./dados/" + nomeArquivo + "/diretorio.db",
             "./dados/" + nomeArquivo + "/cestos.db"
         );
 
+        // Cabeçalho inicial
         if (arquivo.length() < TAM_CABECALHO) {
-            arquivo.writeInt(0);    // Último ID usado
-            arquivo.writeLong(-1);  // Lista de registros excluídos
+            arquivo.writeInt(0);   // último ID
+            arquivo.writeLong(-1); // lista de excluídos
         }
     }
-            public boolean create(T obj) throws Exception {
-                arquivo.seek(0);
-                int novoID = arquivo.readInt() + 1;
-                arquivo.seek(0);
-                arquivo.writeInt(novoID);
-                obj.setId(novoID);
 
-                byte[] dados = obj.toByteArray();
+    // -------------------------------------------
+    // CREATE
+    // -------------------------------------------
+   // -------------------------------------------
+// CREATE
+// -------------------------------------------
+public boolean create(T obj,int fkValue) throws Exception {
+    // Atualiza o último ID e define no objeto
+    arquivo.seek(0);
+    int novoID = arquivo.readInt() + 1;
+    arquivo.seek(0);
+    arquivo.writeInt(novoID);
+    obj.setId(novoID);
 
-                long endereco = getDeleted(dados.length);
-                if (endereco == -1) {
-                    arquivo.seek(arquivo.length());
-                    endereco = arquivo.getFilePointer();
-                    arquivo.writeByte(' ');
-                    arquivo.writeShort(dados.length);
-                    arquivo.write(dados);
-                } else {
-                    arquivo.seek(endereco);
-                    arquivo.writeByte(' ');
-                    arquivo.skipBytes(2);
-                    arquivo.write(dados);
-                }
+    // Serializa os dados
+    byte[] dados = obj.toByteArray();
 
-                I idx = construtorIndice.newInstance();
-                idx.setId(obj.getId());
-                idx.setPos(endereco);
-                indice.create(idx);
+    // Verifica se há espaço disponível na lista de excluídos
+    long endereco = getDeleted(dados.length);
+    if (endereco == -1) {
+        arquivo.seek(arquivo.length());
+        endereco = arquivo.getFilePointer();
+        arquivo.writeByte(' ');      // Lápide
+        arquivo.writeShort(dados.length);
+        arquivo.write(dados);
+    } else {
+        arquivo.seek(endereco);
+        arquivo.writeByte(' ');      // Lápide
+        arquivo.skipBytes(2);        // pula o tamanho
+        arquivo.write(dados);
+    }
 
-                return true;
-            }
+    // Atualiza índice hash principal
+    I idx = construtorIndice.newInstance();
+    idx.setId(obj.getId());
+    idx.setPos(endereco);
+    indice.create(idx);
+
+    // Atualiza índice B+ de FK, se existir
+     if (indiceFK != null) {
+        F fkObj = indiceFK.getConstrutor().newInstance();
+        fkObj.setId(fkValue); // usa o valor passado
+        fkObj.setPos(endereco);
+        indiceFK.create(fkObj);
+    }
+
+    return true;
+}
 
 
-            
+    // -------------------------------------------
+    // READ por ID
+    // -------------------------------------------
+    public T read(int id) throws Exception {
+        I idx = indice.read(id);
+        if (idx == null) return null;
 
-        public T read(int id) throws Exception {
-            I idx = indice.read(id);
-            if (idx == null) return null;
+        arquivo.seek(idx.getPos());
+        byte lapide = arquivo.readByte();
+        short tamanho = arquivo.readShort();
+        byte[] dados = new byte[tamanho];
+        arquivo.read(dados);
 
-            arquivo.seek(idx.getPos());
-            byte lapide = arquivo.readByte();
-            short tamanho = arquivo.readShort();
-            byte[] dados = new byte[tamanho];
-            arquivo.read(dados);
-
-            if (lapide == ' ') {
-                T obj = construtor.newInstance();
-                obj.fromByteArray(dados);
-                return obj;
-            }
-            return null;
-         }
-
-         public T readAt(long pos) throws Exception {
-            arquivo.seek(pos);
-            byte lapide = arquivo.readByte();
-            short tamanho = arquivo.readShort();
-            byte[] dados = new byte[tamanho];
-            arquivo.read(dados);
-
-            if (lapide == ' ') {
-                T obj = construtor.newInstance();
-                obj.fromByteArray(dados);
-                return obj;
-            }
-            return null;
+        if (lapide == ' ') {
+            T obj = construtor.newInstance();
+            obj.fromByteArray(dados);
+            return obj;
         }
+        return null;
+    }
+    public ArvoreBMais<F> getIndiceFK() {
+        return indiceFK;
+    }
+
+    public void setIndiceFK(ArvoreBMais<F> indiceFK) {
+        this.indiceFK = indiceFK;
+}
 
 
+    // -------------------------------------------
+    // READ direto por posição
+    // -------------------------------------------
+    public T readAt(long pos) throws Exception {
+        arquivo.seek(pos);
+        byte lapide = arquivo.readByte();
+        short tamanho = arquivo.readShort();
+        byte[] dados = new byte[tamanho];
+        arquivo.read(dados);
 
-        public boolean delete(int id) throws Exception {
-            I idx = indice.read(id);
-            if (idx == null) return false;
-
-            arquivo.seek(idx.getPos());
-            byte lapide = arquivo.readByte();
-            short tamanho = arquivo.readShort();
-            if (lapide == ' ') {
-                arquivo.seek(idx.getPos());
-                arquivo.writeByte('*');
-                addDeleted(tamanho, idx.getPos());
-                indice.delete(id);
-                return true;
-            }
-            return false;
+        if (lapide == ' ') {
+            T obj = construtor.newInstance();
+            obj.fromByteArray(dados);
+            return obj;
         }
+        return null;
+    }
 
+    // -------------------------------------------
+    // DELETE
+    // -------------------------------------------
+    public boolean delete(int id) throws Exception {
+        I idx = indice.read(id);
+        if (idx == null) return false;
 
+        arquivo.seek(idx.getPos());
+        byte lapide = arquivo.readByte();
+        short tamanho = arquivo.readShort();
+        if (lapide == ' ') {
+            arquivo.seek(idx.getPos());
+            arquivo.writeByte('*');
+            addDeleted(tamanho, idx.getPos());
+            indice.delete(id);
+            return true;
+        }
+        return false;
+    }
 
+    // -------------------------------------------
+    // UPDATE
+    // -------------------------------------------
     public boolean update(T novoObj) throws Exception {
         I idx = indice.read(novoObj.getId());
         if (idx == null) return false;
@@ -182,47 +225,42 @@ public class Arquivo<
             novoIndice.setId(novoObj.getId());
             novoIndice.setPos(novoEndereco);
             indice.update(novoIndice);
-    }
-
-    return true;
-}
-
-        public <F extends RegistroArvoreBMais<F>> ArrayList<T> searchByFK(ArvoreBMais<F> indiceFK, int fkValue) throws Exception {
-
-            if (indiceFK == null)
-                throw new IllegalStateException("B+ index (indiceFK) not initialized");
-
-            // Create a temporary FK key
-            F chave;
-            try {
-                chave = indiceFK.getConstrutor().newInstance();
-            } catch (InstantiationException | IllegalAccessException |
-                    InvocationTargetException e) {
-                throw new RuntimeException("Failed to create instance of FK", e);
-            }
-
-            chave.setId(fkValue); // assuming 'id' in F represents the foreign key
-
-            // Find all entries with this FK
-            ArrayList<F> indices = indiceFK.read(chave);
-
-            ArrayList<T> resultados = new ArrayList<>();
-
-            for (F ind : indices) {
-                long pos = ind.getPos();          
-                T obj = this.readAt(pos);         // readAt reads by file pointer
-                if (obj != null)
-                    resultados.add(obj);
-            }
-
-
-            return resultados;
         }
 
+        return true;
+    }
 
+    // -------------------------------------------
+    // SEARCH BY FOREIGN KEY (B+ Tree)
+    // -------------------------------------------
+    public ArrayList<T> searchByFK(int fkValue) throws Exception {
+        if (indiceFK == null)
+            throw new IllegalStateException("B+ index (indiceFK) not initialized");
 
+        // cria uma chave temporária
+        F chave;
+        try {
+            chave = indiceFK.getConstrutor().newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create instance of FK type", e);
+        }
 
+        chave.setId(fkValue);
+        ArrayList<F> indices = indiceFK.read(chave);
 
+        ArrayList<T> resultados = new ArrayList<>();
+        for (F ind : indices) {
+            long pos = ind.getPos();
+            T obj = this.readAt(pos);
+            if (obj != null) resultados.add(obj);
+        }
+
+        return resultados;
+    }
+
+    // -------------------------------------------
+    // Gerenciamento de espaços excluídos
+    // -------------------------------------------
     private void addDeleted(int tamanhoEspaco, long enderecoEspaco) throws Exception {
         long posicao = 4;
         arquivo.seek(posicao);
@@ -262,9 +300,7 @@ public class Arquivo<
         }
     }
 
-
-
-   private long getDeleted(int tamanhoNecessario) throws Exception {
+    private long getDeleted(int tamanhoNecessario) throws Exception {
         long posicao = 4;
         arquivo.seek(posicao);
         long endereco = arquivo.readLong();
@@ -287,10 +323,11 @@ public class Arquivo<
         return -1;
     }
 
-
-
-        public void close() throws Exception {
-            arquivo.close();
-        }
-
+    // -------------------------------------------
+    // CLOSE
+    // -------------------------------------------
+    public void close() throws Exception {
+        arquivo.close();
+    }
 }
+
