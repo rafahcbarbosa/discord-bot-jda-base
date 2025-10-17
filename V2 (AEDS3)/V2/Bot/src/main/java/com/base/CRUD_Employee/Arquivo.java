@@ -5,7 +5,7 @@ import java.io.RandomAccessFile;
 import java.lang.reflect.Constructor;
 
 public class Arquivo<T extends Registro> {
-    private static final int TAM_CABECALHO = 4;
+    private static final int TAM_CABECALHO = 12;
     private RandomAccessFile arquivo;
     private String nomeArquivo;
     private Constructor<T> construtor;

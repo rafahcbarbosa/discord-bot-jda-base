@@ -1,7 +1,4 @@
 package com.base.CRUD_Employee;
-
-import com.base.util.Utils;
-
 public class EmployeeDAO {
 
     private Arquivo<Employee> arqEmployees;
@@ -16,8 +13,6 @@ public class EmployeeDAO {
 
     public boolean insertEmployee(Employee employee) throws Exception {
 
-        //TODO: Implementar essa função
-        Utils.idUpdate();
         return arqEmployees.create(employee) > 0;
     }
 

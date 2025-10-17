@@ -3,7 +3,6 @@ package com.base.GeneralStructures;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import com.base.interfaces.Registro;
@@ -16,6 +15,7 @@ public class Arquivo<
         F extends RegistroArvoreBMais<F>
     > {
 
+    public int ultimoID;    
     private static final int TAM_CABECALHO = 12; // 4 (ID) + 8 (lista de excluídos)
     private RandomAccessFile arquivo;
     private String nomeArquivo;
@@ -23,7 +23,8 @@ public class Arquivo<
     private HashExtensivel<I> indice;
     private Constructor<I> construtorIndice;
     private ArvoreBMais<F> indiceFK; // índice B+ genérico para FK
-
+    
+    
     // -------------------------------------------
     // CONSTRUTOR GENÉRICO
     // -------------------------------------------
@@ -56,25 +57,41 @@ public class Arquivo<
         );
 
         // Cabeçalho inicial
-        if (arquivo.length() < TAM_CABECALHO) {
-            arquivo.writeInt(0);   // último ID
-            arquivo.writeLong(-1); // lista de excluídos
+            if (arquivo.length() < TAM_CABECALHO) {
+            arquivo.writeInt(0);
+            arquivo.writeLong(-1);
+            ultimoID = 0;
+        } else {
+            arquivo.seek(0);
+            ultimoID = arquivo.readInt();
         }
     }
 
-    // -------------------------------------------
-    // CREATE
-    // -------------------------------------------
-   // -------------------------------------------
+
+// -------------------------------------------
 // CREATE
 // -------------------------------------------
 public boolean create(T obj,int fkValue) throws Exception {
-    // Atualiza o último ID e define no objeto
+
+    // Se ainda não inicializou ultimoID, lê do arquivo
+    if (arquivo.length() >= 4) {
+        arquivo.seek(0);
+        ultimoID = arquivo.readInt();
+    } else {
+        // arquivo vazio, inicializa cabeçalho
+        ultimoID = 0;
+        arquivo.seek(0);
+        arquivo.writeInt(ultimoID);
+        arquivo.writeLong(-1); // lista de registros excluídos
+    }
+
+    // Incrementa o ID e atualiza no objeto
+    ultimoID++;
+    obj.setId(ultimoID);
+
+    // Atualiza o ID no arquivo
     arquivo.seek(0);
-    int novoID = arquivo.readInt() + 1;
-    arquivo.seek(0);
-    arquivo.writeInt(novoID);
-    obj.setId(novoID);
+    arquivo.writeInt(ultimoID);
 
     // Serializa os dados
     byte[] dados = obj.toByteArray();
@@ -101,7 +118,7 @@ public boolean create(T obj,int fkValue) throws Exception {
     indice.create(idx);
 
     // Atualiza índice B+ de FK, se existir
-     if (indiceFK != null) {
+    if (indiceFK != null) {
         F fkObj = indiceFK.getConstrutor().newInstance();
         fkObj.setId(fkValue); // usa o valor passado
         fkObj.setPos(endereco);
@@ -110,6 +127,7 @@ public boolean create(T obj,int fkValue) throws Exception {
 
     return true;
 }
+
 
 
     // -------------------------------------------
@@ -145,9 +163,19 @@ public boolean create(T obj,int fkValue) throws Exception {
     // READ direto por posição
     // -------------------------------------------
     public T readAt(long pos) throws Exception {
+        
+        if (pos < TAM_CABECALHO || pos >= arquivo.length()) {
+            return null; // evita EOF
+        }
+
         arquivo.seek(pos);
         byte lapide = arquivo.readByte();
         short tamanho = arquivo.readShort();
+
+        if (pos + 3 + tamanho > arquivo.length()) {
+            return null; // evita ler além do fim
+        }
+
         byte[] dados = new byte[tamanho];
         arquivo.read(dados);
 

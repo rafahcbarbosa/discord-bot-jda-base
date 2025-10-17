@@ -1,10 +1,12 @@
 package com.base.listeners;
 
-import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import java.util.ArrayList;
+
 import com.base.CRUD_Employee.Employee;
 import com.base.CRUD_Meeting.Meeting;
-import java.util.ArrayList;
+
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class ModalListener extends ListenerAdapter{
     
@@ -49,57 +51,66 @@ public class ModalListener extends ListenerAdapter{
                 System.out.println("Role: " + employee2.getRole());
                 System.out.println("==================================");
                 // Debug
+                
 
+                event.reply("Você foi registrado com sucesso!\n\n **ID:** " + employee.getId())
+                .setEphemeral(true)
+                .queue();
+    
             } catch (Exception e) {
 
                 e.printStackTrace();
             }
 
-        } else if (modal.equals("meetingFirst")){
+        } else if (modal.equals("meetingFirst")) {
 
-            
             String meetingName = event.getValue("tema").getAsString();
             String description = event.getValue("descrição").getAsString();
             String date = event.getValue("data").getAsString();
             String startTime = event.getValue("início").getAsString();
             String finishTime = event.getValue("fim").getAsString();
+
             try {
                 int idEmployee = 1;
-                    // TODO: handle exception
-                 Meeting meeting = new Meeting(meetingName,description,date,startTime,finishTime,idEmployee);
-                 Meeting meeting2 = new Meeting(meetingName,description,date,startTime,finishTime,idEmployee);
-                 Meeting meeting3 = new Meeting(meetingName,description,date,startTime,finishTime,idEmployee);
-                meeting.insertMeeting();
-                
-                ArrayList<Meeting> meetings4 = meeting.searchByFK(1);
 
-                for (Meeting meeting5: meetings4) {
-                    System.out.println("===== MEETING FORM DATA =====");
-                    System.out.println("Tema: " + meeting5.getName());
-                    System.out.println("Descrição: " + meeting5.getDescription());
-                    System.out.println("Data: " +  meeting5.getDate());
-                    System.out.println("Horário de início: " + meeting5.getStartTime());
-                    System.out.println("Horário de término: " + meeting5.getEndTime());
-                    System.out.println("==============================");
-                
+                // Cria o meeting
+                Meeting meeting = new Meeting();
+                meeting.setName(meetingName);
+                meeting.setDescription(description);
+                meeting.setDate(date);
+                meeting.setStartTime(startTime);
+                meeting.setEndTime(finishTime);
+                meeting.setIdEmployee(idEmployee);
+
+                // "Serializa" e "desserializa" na hora (simula insert + read)
+                byte[] bytes = meeting.toByteArray();
+                Meeting meetingCopy = new Meeting();
+                meetingCopy.fromByteArray(bytes);
+
+                // Lista local para armazenar meetings
+                ArrayList<Meeting> meetings = new ArrayList<>();
+                meetings.add(meetingCopy);
+
+                // Imprime na moral do cavalo
+                System.out.println("===== MEETING FORM DATA =====");
+                for (Meeting m : meetings) {
+                    System.out.println("ID: " + m.getId() +
+                                    " | Tema: " + m.getName() +
+                                    " | Descrição: " + m.getDescription() +
+                                    " | Data: " + m.getDate() +
+                                    " | Início: " + m.getStartTime() +
+                                    " | Término: " + m.getEndTime() +
+                                    " | ID Employee: " + m.getIdEmployee());
                 }
-                    // usa meeting5 normalmente
-                    System.out.println("===== MEETING FORM DATA =====");
-                    System.out.println("Tema: " + meetings4.get(0).getName());
-                    System.out.println("Descrição: " + meeting2.getDescription());
-                    System.out.println("Data: " +  meeting2.getDate());
-                    System.out.println("Horário de início: " + meeting2.getStartTime());
-                    System.out.println("Horário de término: " + meeting2.getEndTime());
-                    System.out.println("==============================");
-                
-                System.out.println("teste");
-                
+                System.out.println("==============================");
+
+                event.reply("```Reunião criada com sucesso!```\n**ID:** " + meeting.getId() + "\n**Tema:** " + meetingName + "\n**Descrição:** " + description)
+                .setEphemeral(true)
+                .queue();
+
             } catch (Exception e) {
-                System.out.println(e);
-                System.out.println("teste");
+                e.printStackTrace();
             }
         }
-
-        event.deferReply().queue();        
     }
 }

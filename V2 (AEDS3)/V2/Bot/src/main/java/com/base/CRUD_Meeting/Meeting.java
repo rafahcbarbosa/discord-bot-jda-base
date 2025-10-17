@@ -1,23 +1,35 @@
 package com.base.CRUD_Meeting;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
-import com.base.interfaces.Registro;
 import com.base.GeneralStructures.Arquivo;
 import com.base.GeneralStructures.ArvoreBMais;
+import com.base.interfaces.Registro;
 
 public class Meeting implements Registro {
 
     // Arquivo e índice B+ compartilhados entre todas as instâncias
     private static Arquivo<Meeting, IndiceMeeting, IndiceFk> arqMeetings;
+    
+    private int id;
+    private String name;
+    private String description;
+    private String date;
+    private String startTime;
+    private String endTime;
+    private int idEmployee;
 
     static {
         try {
             ArvoreBMais<IndiceFk> arvoreFK = new ArvoreBMais<>(
                 IndiceFk.class.getConstructor(),
                 4,
-                "meeting_fk.idx"
+                "meeting_fk.db"
             );
 
             arqMeetings = new Arquivo<>(
@@ -31,14 +43,6 @@ public class Meeting implements Registro {
             e.printStackTrace();
         }
     }
-
-    private int id;
-    private String name;
-    private String description;
-    private String date;
-    private String startTime;
-    private String endTime;
-    private int idEmployee;
 
     public Meeting() {
         this(-1, "", "", "", "", "", 1);
@@ -116,6 +120,10 @@ public class Meeting implements Registro {
 
     public Meeting searchMeeting() throws Exception {
         return arqMeetings.read(this.id);
+    }
+
+    public Meeting searchMeeting(int id) throws Exception {
+        return arqMeetings.read(id);
     }
 
     public boolean updateMeeting() throws Exception {

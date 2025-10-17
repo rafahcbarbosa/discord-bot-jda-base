@@ -8,9 +8,6 @@ import com.base.listeners.SlashCommandListener;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class Main {
@@ -34,25 +31,5 @@ public class Main {
 
         jda.awaitReady();
 
-        Guild server = jda.getGuildById(Utils.serverID);
-
-        if (server != null){
-
-            server.updateCommands().addCommands(
-
-                Commands.slash(Utils.command[0], Utils.description[0]),
-                Commands.slash(Utils.command[1], Utils.description[1]),
-                Commands.slash("kill", "Desliga o bot (somente dono)").setDefaultPermissions(DefaultMemberPermissions.DISABLED)
-
-            ).queue(
-
-                success -> System.out.println("- Comandos registrados na guild!"),
-                error -> error.printStackTrace()
-            );
-
-        } else {
-
-            System.out.println("- Servidor não encontrado!");
-        }
     }
 }

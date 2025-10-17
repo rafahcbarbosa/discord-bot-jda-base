@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class Employee implements Registro{
 
-    private EmployeeDAO employeeDAO;
+    public EmployeeDAO employeeDAO;
     private int id;
     private String name;
     private String phoneNumber;
@@ -128,7 +128,7 @@ public class Employee implements Registro{
 
     public Employee searchEmployee() throws Exception{
 
-        return employeeDAO.searchEmployee(id);
+        return employeeDAO.searchEmployee(this.id);
     }
 
     public void insertEmployee() throws Exception{
