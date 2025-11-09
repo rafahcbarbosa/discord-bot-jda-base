@@ -1,5 +1,6 @@
 package com.base.interfaces;
 
+
 import java.io.IOException;
 
 public interface RegistroArvoreBMais<T> {

@@ -3,21 +3,23 @@ package com.base.listeners;
 import java.util.ArrayList;
 
 import com.base.CRUD_Employee.Employee;
+import com.base.CRUD_Employee.EmployeeDAO;
 import com.base.CRUD_Meeting.Meeting;
+import com.base.CRUD_Meeting.MeetingDAO;
 
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class ModalListener extends ListenerAdapter{
-    
+public class ModalListener extends ListenerAdapter {
+
     @Override
-    public void onModalInteraction (ModalInteractionEvent event){
+    public void onModalInteraction(ModalInteractionEvent event) {
 
         System.out.println("- InteractionEvent");
 
         String modal = event.getModalId();
 
-        if (modal.equals("registerFirst")){
+        if (modal.equals("registerFirst")) {
 
             String name = event.getValue("nome").getAsString();
             String email = event.getValue("email").getAsString();
@@ -32,7 +34,6 @@ public class ModalListener extends ListenerAdapter{
             System.out.println("Birthdate: " + birthdate);
             System.out.println("Role: " + role);
             System.out.println("==================================");
-
 
             try {
 
@@ -51,12 +52,11 @@ public class ModalListener extends ListenerAdapter{
                 System.out.println("Role: " + employee2.getRole());
                 System.out.println("==================================");
                 // Debug
-                
 
                 event.reply("Você foi registrado com sucesso!\n\n **ID:** " + employee.getId())
-                .setEphemeral(true)
-                .queue();
-    
+                        .setEphemeral(true)
+                        .queue();
+
             } catch (Exception e) {
 
                 e.printStackTrace();
@@ -72,7 +72,8 @@ public class ModalListener extends ListenerAdapter{
 
             try {
                 int idEmployee = 1;
-
+                MeetingDAO meetingDAO = new MeetingDAO();
+                EmployeeDAO employeeDAO = new EmployeeDAO();
                 // Cria o meeting
                 Meeting meeting = new Meeting();
                 meeting.setName(meetingName);
@@ -81,32 +82,25 @@ public class ModalListener extends ListenerAdapter{
                 meeting.setStartTime(startTime);
                 meeting.setEndTime(finishTime);
                 meeting.setIdEmployee(idEmployee);
+                Employee user = employeeDAO.searchEmployee(idEmployee);
+                if (user == null) {
+                    event.reply("```Employee does not exist!```")
+                            .setEphemeral(true)
+                            .queue();
+                } else {
+                    // "Serializa" e "desserializa" na hora (simula insert + read)
+                    byte[] bytes = meeting.toByteArray();
+                    Meeting meetingCopy = new Meeting();
+                    meetingCopy.fromByteArray(bytes);
+                    meetingDAO.insertMeeting(meeting);
 
-                // "Serializa" e "desserializa" na hora (simula insert + read)
-                byte[] bytes = meeting.toByteArray();
-                Meeting meetingCopy = new Meeting();
-                meetingCopy.fromByteArray(bytes);
-
-                // Lista local para armazenar meetings
-                ArrayList<Meeting> meetings = new ArrayList<>();
-                meetings.add(meetingCopy);
-
-                // Imprime na moral do cavalo
-                System.out.println("===== MEETING FORM DATA =====");
-                for (Meeting m : meetings) {
-                    System.out.println("ID: " + m.getId() +
-                                    " | Tema: " + m.getName() +
-                                    " | Descrição: " + m.getDescription() +
-                                    " | Data: " + m.getDate() +
-                                    " | Início: " + m.getStartTime() +
-                                    " | Término: " + m.getEndTime() +
-                                    " | ID Employee: " + m.getIdEmployee());
+                    // Lista local para armazenar meetings
+                    
+                    event.reply("```Reunião criada com sucesso!```\n**ID:** " + meeting.getId() + "\n**Tema:** "
+                            + meetingName + "\n**Descrição:** " + description)
+                            .setEphemeral(true)
+                            .queue();
                 }
-                System.out.println("==============================");
-
-                event.reply("```Reunião criada com sucesso!```\n**ID:** " + meeting.getId() + "\n**Tema:** " + meetingName + "\n**Descrição:** " + description)
-                .setEphemeral(true)
-                .queue();
 
             } catch (Exception e) {
                 e.printStackTrace();

@@ -14,8 +14,7 @@ import com.base.interfaces.Registro;
 public class Meeting implements Registro {
 
     // Arquivo e índice B+ compartilhados entre todas as instâncias
-    private static Arquivo<Meeting, IndiceMeeting, IndiceFk> arqMeetings;
-    
+
     private int id;
     private String name;
     private String description;
@@ -24,25 +23,7 @@ public class Meeting implements Registro {
     private String endTime;
     private int idEmployee;
 
-    static {
-        try {
-            ArvoreBMais<IndiceFk> arvoreFK = new ArvoreBMais<>(
-                IndiceFk.class.getConstructor(),
-                4,
-                "meeting_fk.db"
-            );
-
-            arqMeetings = new Arquivo<>(
-                "meeting",
-                Meeting.class.getConstructor(),
-                IndiceMeeting.class.getConstructor(),
-                arvoreFK
-            );
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    
 
     public Meeting() {
         this(-1, "", "", "", "", "", 1);
@@ -52,7 +33,8 @@ public class Meeting implements Registro {
         this(-1, name, description, date, startTime, endTime, idEmployee);
     }
 
-    public Meeting(int id, String name, String description, String date, String startTime, String endTime, int idEmployee) {
+    public Meeting(int id, String name, String description, String date, String startTime, String endTime,
+            int idEmployee) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -63,26 +45,61 @@ public class Meeting implements Registro {
     }
 
     // Getters e setters ↓↓↓
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getName() {
+        return name;
+    }
 
-    public String getDate() { return date; }
-    public void setDate(String date) { this.date = date; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getStartTime() { return startTime; }
-    public void setStartTime(String startTime) { this.startTime = startTime; }
+    public String getDescription() {
+        return description;
+    }
 
-    public String getEndTime() { return endTime; }
-    public void setEndTime(String endTime) { this.endTime = endTime; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public int getIdEmployee() { return idEmployee; }
-    public void setIdEmployee(int idEmployee) { this.idEmployee = idEmployee; }
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public int getIdEmployee() {
+        return idEmployee;
+    }
+
+    public void setIdEmployee(int idEmployee) {
+        this.idEmployee = idEmployee;
+    }
 
     // Serialização ↓↓↓
     public byte[] toByteArray() throws IOException {
@@ -112,10 +129,19 @@ public class Meeting implements Registro {
         this.endTime = dis.readUTF();
         this.idEmployee = dis.readInt();
     }
+    public String getString(){
+        return this.name;
+    }
+    public int getForeignKey() {
+        return this.idEmployee;
+    }
+    public int getIntKey(){
+        return this.id;
+    }
 
-    // CRUD ↓↓↓
+    /* 
     public boolean insertMeeting() throws Exception {
-        return arqMeetings.create(this,this.idEmployee);
+        return arqMeetings.create(this, this.idEmployee);
     }
 
     public Meeting searchMeeting() throws Exception {
@@ -134,9 +160,9 @@ public class Meeting implements Registro {
         return arqMeetings.delete(this.id);
     }
 
-   public ArrayList<Meeting> searchByFK(int fkValue) throws Exception {
-    // chama diretamente o método do Arquivo que já retorna ArrayList<Meeting>
-        return arqMeetings.searchByFK(fkValue);
-    }
+    
+
+    
+        */
 
 }
