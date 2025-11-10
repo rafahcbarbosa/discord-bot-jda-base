@@ -8,7 +8,7 @@
 5- Instale o Apache Maven para rodar o programa  
   
 # COMPILANDO  
-abra o CMD no diretório "discord-bot-jda-base\V3 (AEDS3)\Bot\src"  
+IMPORTANTE: Abra o CMD no diretório "discord-bot-jda-base\V3 (AEDS3)\Bot\src"  
 * mvn clean install (quando der algum problema)  
 * mvn compile exec:java (para executar o programa)  
 * ctrl + c (encerrar a execução do bot)  
