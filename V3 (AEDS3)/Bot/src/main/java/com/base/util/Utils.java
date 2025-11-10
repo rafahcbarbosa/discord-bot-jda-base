@@ -5,7 +5,7 @@ public class Utils {
     public static final String apiToken = ;
     public static final String adminID = "593532741602246656";
     public static final String serverID = "1391108240665874553";
-    public static final String debugChannelID = "1391108241106141224";
+    public static final String debugChannelID = "1437239436160008212";
 
     public static final String[] command = {
 
