@@ -1,16 +1,16 @@
-# discord-bot-jda-base
-
-# PASSO A PASSO
-1- Crie uma conta no discord (https://discord.com/)
-2- Entre no servidor de testes (https://discord.gg/2TymcAfaVK)
-3- Baixe o código na sua máquina
-4- Adicione a chave de API enviada (se você não possui a chave de API, não é para você testar o bot :P)
-5- Instale o Apache Maven para rodar o programa
-
+# discord-bot-jda-base  
+  
+# PASSO A PASSO  
+1- Crie uma conta no discord (https://discord.com/)  
+2- Entre no servidor de testes (https://discord.gg/2TymcAfaVK)  
+3- Baixe o código na sua máquina  
+4- Adicione a chave de API enviada (se você não possui a chave de API, não é para você testar o bot :P)  
+5- Instale o Apache Maven para rodar o programa  
+  
 # COMPILANDO
-mvn clean install (quando der algum problema)
-mvn compile exec:java (para executar o programa)
-ctrl + c (encerrar a execução do bot)
+mvn clean install (quando der algum problema)  
+mvn compile exec:java (para executar o programa)  
+ctrl + c (encerrar a execução do bot)  
 
 # COMANDOS
 ### 👤 Gerenciamento de Usuário
