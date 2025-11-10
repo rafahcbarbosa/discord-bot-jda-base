@@ -7,10 +7,11 @@
 4- Adicione a chave de API enviada (se você não possui a chave de API, não é para você testar o bot :P)  
 5- Instale o Apache Maven para rodar o programa  
   
-# COMPILANDO
-mvn clean install (quando der algum problema)  
-mvn compile exec:java (para executar o programa)  
-ctrl + c (encerrar a execução do bot)  
+# COMPILANDO  
+abra o CMD no diretório "discord-bot-jda-base\V3 (AEDS3)\Bot\src"  
+* mvn clean install (quando der algum problema)  
+* mvn compile exec:java (para executar o programa)  
+* ctrl + c (encerrar a execução do bot)  
 
 # COMANDOS
 ### 👤 Gerenciamento de Usuário
