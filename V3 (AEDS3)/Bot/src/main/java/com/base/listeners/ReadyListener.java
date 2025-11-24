@@ -86,6 +86,9 @@ public class ReadyListener extends ListenerAdapter{
                 Commands.slash(Utils.command[13], Utils.description[13])
                     .addOption(OptionType.STRING, "id", "ID do membro", true),
 
+                Commands.slash(Utils.command[14], Utils.description[14]),
+                Commands.slash(Utils.command[15], Utils.description[15]),
+
 
                 Commands.slash("kill", "Desliga o bot (somente dono)").setDefaultPermissions(DefaultMemberPermissions.DISABLED)
 

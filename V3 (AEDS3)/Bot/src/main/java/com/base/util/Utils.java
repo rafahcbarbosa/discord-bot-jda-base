@@ -22,11 +22,12 @@ public class Utils {
             "mostrar-membro", // [10]
             "adicionar-membro-reuniao", // [11]
             "mostrar-membros-reuniao", // [12]
-            "mostrar-reunioes-membro" // [13]
+            "mostrar-reunioes-membro", // [13]
+            "huffman",
+            "decode-huffman"
     };
 
     public static final String[] description = {
-
             "Registra o usuário no sistema", // [0]
             "Agenda uma reunião", // [1]
             "Atualiza seu cadastro", // [2]
@@ -40,6 +41,8 @@ public class Utils {
             "Mostra as informações de um membro", // [10]
             "Adiciona um membro a uma reunião", // [11]
             "Lista todos os membros que participam de uma reunião", // [12]
-            "Lista todas as reuniões das quais um membro participa" // [13]
+            "Lista todas as reuniões das quais um membro participa", // [13]
+            "Huffman encoding",
+            "Huffman decoding"
     };
 }

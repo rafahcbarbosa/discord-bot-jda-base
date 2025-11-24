@@ -20,26 +20,24 @@ public class Meeting implements Registro {
     private String description;
     private String date;
     private String startTime;
-    private String endTime;
     private int idEmployee;
 
     
     public Meeting() {
-        this(-1, "", "", "", "", "", 1);
+        this(-1, "", "", "", "", 1);
     }
 
-    public Meeting(String name, String description, String date, String startTime, String endTime, int idEmployee) {
-        this(-1, name, description, date, startTime, endTime, idEmployee);
+    public Meeting(String name, String description, String date, String startTime, int idEmployee) {
+        this(-1, name, description, date, startTime, idEmployee);
     }
 
-    public Meeting(int id, String name, String description, String date, String startTime, String endTime,
-            int idEmployee) {
+    public Meeting(int id, String name, String description, String date, String startTime,int idEmployee) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.date = date;
         this.startTime = startTime;
-        this.endTime = endTime;
+        
         this.idEmployee = idEmployee;
     }
 
@@ -84,13 +82,7 @@ public class Meeting implements Registro {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
+    
 
     public int getIdEmployee() {
         return idEmployee;
@@ -110,7 +102,6 @@ public class Meeting implements Registro {
         dos.writeUTF(this.description);
         dos.writeUTF(this.date);
         dos.writeUTF(this.startTime);
-        dos.writeUTF(this.endTime);
         dos.writeInt(this.idEmployee);
 
         return baos.toByteArray();
@@ -125,7 +116,6 @@ public class Meeting implements Registro {
         this.description = dis.readUTF();
         this.date = dis.readUTF();
         this.startTime = dis.readUTF();
-        this.endTime = dis.readUTF();
         this.idEmployee = dis.readInt();
     }
     public String getString(){

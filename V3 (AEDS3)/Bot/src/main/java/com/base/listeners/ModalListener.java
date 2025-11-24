@@ -1,6 +1,7 @@
 package com.base.listeners;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.base.CRUD_Employee.Employee;
 import com.base.CRUD_Employee.EmployeeDAO;
@@ -68,40 +69,43 @@ public class ModalListener extends ListenerAdapter {
             String description = event.getValue("descrição").getAsString();
             String date = event.getValue("data").getAsString();
             String startTime = event.getValue("início").getAsString();
-            String finishTime = event.getValue("fim").getAsString();
-
+            String idEmployee = event.getValue("fim").getAsString();
+            Scanner sc = new Scanner(idEmployee);
             try {
-                int idEmployee = 1;
-                MeetingDAO meetingDAO = new MeetingDAO();
-                EmployeeDAO employeeDAO = new EmployeeDAO();
-                // Cria o meeting
-                Meeting meeting = new Meeting();
-                meeting.setName(meetingName);
-                meeting.setDescription(description);
-                meeting.setDate(date);
-                meeting.setStartTime(startTime);
-                meeting.setEndTime(finishTime);
-                meeting.setIdEmployee(idEmployee);
-                Employee user = employeeDAO.searchEmployee(idEmployee);
-                if (user == null) {
-                    event.reply("```Employee does not exist!```")
-                            .setEphemeral(true)
-                            .queue();
-                } else {
-                    // "Serializa" e "desserializa" na hora (simula insert + read)
-                    byte[] bytes = meeting.toByteArray();
-                    Meeting meetingCopy = new Meeting();
-                    meetingCopy.fromByteArray(bytes);
-                    meetingDAO.insertMeeting(meeting);
+                if (sc.hasNextInt()) {
+                    MeetingDAO meetingDAO = new MeetingDAO();
+                    EmployeeDAO employeeDAO = new EmployeeDAO();
+                    // Cria o meeting
+                    Meeting meeting = new Meeting();
+                    meeting.setName(meetingName);
+                    meeting.setDescription(description);
+                    meeting.setDate(date);
+                    meeting.setStartTime(startTime);
+                    meeting.setIdEmployee(Integer.parseInt(idEmployee));
+                    Employee user = employeeDAO.searchEmployee(Integer.parseInt(idEmployee));
+                    if (user == null) {
+                        event.reply("```Employee does not exist!```")
+                                .setEphemeral(true)
+                                .queue();
+                    } else {
+                        // "Serializa" e "desserializa" na hora (simula insert + read)
+                        byte[] bytes = meeting.toByteArray();
+                        Meeting meetingCopy = new Meeting();
+                        meetingCopy.fromByteArray(bytes);
+                        MeetingDAO.insertMeeting(meeting);
 
-                    // Lista local para armazenar meetings
-                    
-                    event.reply("```Reunião criada com sucesso!```\n**ID:** " + meeting.getId() + "\n**Tema:** "
-                            + meetingName + "\n**Descrição:** " + description)
-                            .setEphemeral(true)
-                            .queue();
+                        // Lista local para armazenar meetings
+
+                        event.reply("```Reunião criada com sucesso!```\n**ID:** " + meeting.getId() + "\n**Tema:** "
+                                + meetingName + "\n**Descrição:** " + description)
+                                .setEphemeral(true)
+                                .queue();
+                    }
+                }else{
+                    event.reply("```Employeeid must be an integer```")
+                                .setEphemeral(true)
+                                .queue();
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }

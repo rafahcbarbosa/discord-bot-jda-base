@@ -275,6 +275,27 @@ public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
 
   }
 
+  public String dumpCestos() throws Exception {
+    arqCestos.seek(0);
+    byte[] all = new byte[(int) arqCestos.length()];
+    arqCestos.readFully(all);
+    return java.util.Base64.getEncoder().encodeToString(all);
+  }
+
+  public String dumpDiretorios() throws Exception {
+    arqDiretorio.seek(0);
+    byte[] all = new byte[(int) arqDiretorio.length()];
+    arqDiretorio.readFully(all);
+    return java.util.Base64.getEncoder().encodeToString(all);
+  }
+
+  public void loadCestos(String base64) throws Exception {
+    byte[] data = java.util.Base64.getDecoder().decode(base64);
+    arqCestos.setLength(0);
+    arqCestos.seek(0);
+    arqCestos.write(data);
+  }
+
   public HashExtensivel(Constructor<T> ct, int n, String nd, String nc) throws Exception {
     construtor = ct;
     quantidadeDadosPorCesto = n;
