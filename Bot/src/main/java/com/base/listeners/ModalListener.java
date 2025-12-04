@@ -54,7 +54,7 @@ public class ModalListener extends ListenerAdapter {
                             .queue();
                 } else {
 
-                    Employee employee = new Employee(name, phoneNumber,email, birthdate, role);
+                    Employee employee = new Employee(name, phoneNumber, email, birthdate, role);
                     EmployeeDAO.insertEmployee(employee);
 
                     // Debug
@@ -79,9 +79,66 @@ public class ModalListener extends ListenerAdapter {
                 e.printStackTrace();
             }
 
-        } else if (modal.equals("meetingFirst"))
+        } else if (modal.equals("registerSecond")) {
+            try {
+                String name = event.getValue("nome").getAsString();
+                String email = event.getValue("email").getAsString().trim();
+                String phoneNumber = event.getValue("telefone").getAsString();
+                String birthdate = event.getValue("nascimento").getAsString();
+                String role = event.getValue("seleção-cargo").getAsString();
+                String emailRegex = "^[\\w.-]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 
-        {
+                Employee existingEmployee = EmployeeDAO.searchByEmail(Encriptor.Criptografar(email));
+                System.out.println("===== REGISTRATION FORM DATA =====");
+                System.out.println("Name: " + name);
+                System.out.println("Email: " + email);
+                System.out.println("Phone Number: " + phoneNumber);
+                System.out.println("Birthdate: " + birthdate);
+                System.out.println("Role: " + role);
+                System.out.println("==================================");
+
+                System.out.println(existingEmployee != null);
+
+                if (existingEmployee == null) {
+                    event.reply("```Usuário não existente```")
+                            .setEphemeral(true)
+                            .queue();
+                } else {
+
+                    Employee employee = new Employee(existingEmployee.getId(), name, phoneNumber, email, birthdate,
+                            role);
+
+                    if (EmployeeDAO.updateEmployee(employee)) {
+                        event.reply("Funcionário foi atualizado com sucesso!\n\n **ID:** " + employee.getId())
+                                .setEphemeral(true)
+                                .queue();
+
+                    } else {
+                        event.reply("Falha em update\n\n **ID:** " + employee.getId())
+                                .setEphemeral(true)
+                                .queue();
+
+                    }
+
+                    // Debug
+
+                    System.out.println("===== DB SEARCH FORM DATA =====");
+                    System.out.println("ID: " + employee.getName());
+                    System.out.println("Name: " + employee.getName());
+                    System.out.println("Email: " + employee.getEmail());
+                    System.out.println("Phone Number: " + employee.getPhoneNumber());
+                    System.out.println("Birthdate: " + employee.getBirthdate());
+                    System.out.println("Role: " + employee.getRole());
+                    System.out.println("==================================");
+                    // Debug
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else if (modal.equals("meetingFirst")) {
             String dateRegex = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$";
             String timeRegex = "^(?:[01]\\d|2[0-3]):[0-5]\\d$";
             String meetingName = event.getValue("tema").getAsString();

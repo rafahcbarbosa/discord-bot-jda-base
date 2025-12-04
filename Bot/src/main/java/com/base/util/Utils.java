@@ -2,14 +2,14 @@ package com.base.util;
 
 public class Utils {
 
-    public static final String apiToken = 
+    public static final String apiToken =
     public static final String adminID = "593532741602246656";
     public static final String serverID = "1391108240665874553";
     public static final String debugChannelID = "1437239436160008212";
 
     public static final String[] command = {
 
-            "registro-employee", // [0]
+            "criar-employee", // [0]
             "criar-reunião", // [1]
             "atualizar-employee", // [2]
             "atualizar-reunião", // [3]
@@ -19,16 +19,17 @@ public class Utils {
             "mostrar-reunião", // [7]
             "mostrar-todas-reuniões", // [8]
             "criar-user", // [9]
-            "mostrar-membro", // [10]
-            "adicionar-membro-reuniao", // [11]
-            "mostrar-membros-reuniao", // [12]
-            "mostrar-reunioes-membro", // [13]
+            "mostrar-user", // [10]
+            "adicionar-employee-reuniao", // [11]
+            "mostrar-employees-reuniao", // [12]
+            "mostrar-reunioes-employee", // [13]
             "huffman",
             "decode-huffman",
             "lzw",
             "decode-lzw",
             "buscar-employee-nome",
-            "buscar-user-nome"   
+            "buscar-user-nome",
+            "deletar-proprio-user"
     };
 
     public static final String[] description = {
@@ -51,6 +52,7 @@ public class Utils {
             "LZW encoding",
             "LZW decoding",
             "busca Employee por nome",
-            "busca User por nome"   
+            "busca User por nome",
+            "deletar-proprio-user"   
     };
 }

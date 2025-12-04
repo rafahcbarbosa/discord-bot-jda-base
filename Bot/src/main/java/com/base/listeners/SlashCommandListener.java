@@ -70,7 +70,13 @@ public class SlashCommandListener extends ListenerAdapter {
                 Modal modal = Builder.meetingFirst();
                 event.replyModal(modal).queue();
 
+            } else if (command.equals(Utils.command[2])) {
+
+                Modal modal = Builder.registerSecond();
+                event.replyModal(modal).queue();
+
             } else if (command.equals(Utils.command[3])) {
+                System.out.println("teste");
                 Modal modal = Builder.meetingSecond();
                 event.replyModal(modal).queue();
             } else if (command.equals(Utils.command[4])) {
@@ -82,6 +88,11 @@ public class SlashCommandListener extends ListenerAdapter {
                 if (employee != null) {
 
                     EmployeeDAO.deleteEmployee(id);
+
+                    ArrayList<EmployeeMeeting> employeeMeetings = EmployeeMeetingDAO.searchByEmployee(id);
+                    for (EmployeeMeeting employeeMeeting : employeeMeetings) {
+                        EmployeeMeetingDAO.delete(employeeMeeting.getId());
+                    }
 
                     event.reply("Funcionário **(" + id + ")** excluído com sucesso!")
                             .setEphemeral(true)
@@ -435,7 +446,7 @@ public class SlashCommandListener extends ListenerAdapter {
                         for (EmployeeMeeting m : employeeMeetingArrayList) {
 
                             Meeting meeting = MeetingDAO.searchMeeting(m.getIdMeeting());
-                            
+
                             info += "```INFORMAÇÕES DA REUNIÃO```" + "\n" +
                                     "- **Tema:** " + meeting.getName() + "\n" +
                                     "- **Descrição:** " + meeting.getDescription() + "\n" +
@@ -733,38 +744,59 @@ public class SlashCommandListener extends ListenerAdapter {
                         .queue();
 
                 event.deferReply();
-            }else if (command.equals(Utils.command[18])) {
+            } else if (command.equals(Utils.command[18])) {
                 String email = event.getOption("email").getAsString().trim();
                 Employee employee = EmployeeDAO.searchByEmail(Encriptor.Criptografar(email));
                 String info;
-                if(employee != null){
+                if (employee != null) {
                     info = "```INFORMAÇÕES DE Usuário```" + "\n" +
                             "- **Nome:** " + employee.getName() + "\n" +
                             "- **Telefone:** " + employee.getPhoneNumber() + "\n" +
                             "- **E-mail:** " + employee.getEmail() + "\n" +
                             "- **Data de Nascimento:** " + employee.getBirthdate() + "\n" +
                             "- **Cargo:** " + employee.getRole() + "\n";
-                }else {
+                } else {
                     info = "Employee não encontrado";
                 }
                 event.reply(info)
                         .setEphemeral(true)
                         .queue();
-            }else if (command.equals(Utils.command[19])) {
+            } else if (command.equals(Utils.command[19])) {
                 String nome = event.getOption("nome").getAsString().trim();
                 User user = UserDAO.searchByName(nome);
                 String info;
                 if (user != null) {
                     info = "```INFORMAÇÕES DE Usuário```" + "\n" +
                             "- **Nome:** " + user.getName() + "\n" +
-                            "- **Cargo:** " + user.getCargo() + "\n" ;
-                            
+                            "- **Cargo:** " + user.getCargo() + "\n";
+
                 } else {
                     info = "User não encontrado";
                 }
                 event.reply(info)
                         .setEphemeral(true)
                         .queue();
+            } else if (command.equals(Utils.command[20])) {
+                System.out.println("teste");
+                User user = UserDAO.searchByName(UserName);
+                if (user == null) {
+                    event.reply("User não registrado")
+                            .setEphemeral(true)
+                            .queue();
+                } else {
+                    UserDAO.deleteUser(user.getId());
+                    ArrayList<Meeting> meetings = MeetingDAO.searchByFK(user.getId());
+                    for (Meeting meeting : meetings) {
+                        MeetingDAO.deleteMeeting(meeting.getId());
+                        ArrayList<EmployeeMeeting> employeeMeetings = EmployeeMeetingDAO.searchByMeeting(meeting.getId());
+                        for (EmployeeMeeting employeeMeeting : employeeMeetings) {
+                            EmployeeMeetingDAO.delete(employeeMeeting.getId());
+                        }
+                    }
+                    event.reply("User Deletado")
+                            .setEphemeral(true)
+                            .queue();
+                }
             }
             event.deferReply();
 

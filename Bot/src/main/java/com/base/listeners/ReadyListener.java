@@ -39,8 +39,8 @@ public class ReadyListener extends ListenerAdapter {
                 // criar-reunião
                 Commands.slash(Utils.command[1], Utils.description[1]),
 
-                // // atualizar-registro
-                // Commands.slash(Utils.command[2], Utils.description[2]),
+               
+                Commands.slash(Utils.command[2], Utils.description[2]),
 
                 
                 Commands.slash(Utils.command[3], Utils.description[3]),
@@ -94,6 +94,7 @@ public class ReadyListener extends ListenerAdapter {
                 .addOption(OptionType.STRING,"email","Email do employee",true),
                 Commands.slash(Utils.command[19], Utils.description[19])
                 .addOption(OptionType.STRING,"nome","Nome do User",true),
+                Commands.slash(Utils.command[20], Utils.description[20]),
     
                /*  Commands.slash(Utils.command[16], Utils.description[16]).addOption(OptionType.String,"id",true),*/
 

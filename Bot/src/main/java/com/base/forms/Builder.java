@@ -27,23 +27,16 @@ public class Builder {
     public static Modal registerSecond(){
 
         Modal modal = Modal.create("registerSecond", "Formulário de registro")
-            .addComponents(
                 
-                TextDisplay.of(
+                .addComponents(
                     
-                        """
-                        
-                        - 8-30 caracteres
-                        - Conter um **número**
-                        - Conter um **símbolo**
-                        - Conter uma letra **maiúscula**
+                    Label.of("Nome completo", Field.fullName),
+                    Label.of("Email do Employee (não se pode mudar)", Field.email),
+                    Label.of("Telefone (apenas números, com país e DDD)", Field.phoneNumber),
+                    Label.of("Data de nascimento (padrão dia/mês/ano)", Field.birthdate),
+                    Label.of("Cargo", Field.roleMenu)
 
-                        """),
-
-                Label.of("Senha", Field.password),
-                Label.of("Confirmação de senha", Field.passwordRepeat)
-
-            ).build();
+                ).build();
 
         return modal;
     }
