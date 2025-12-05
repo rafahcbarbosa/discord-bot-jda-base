@@ -4,7 +4,7 @@
 1- Crie uma conta no discord (https://discord.com/)  
 2- Entre no servidor de testes (https://discord.gg/2TymcAfaVK)  
 3- Baixe o código na sua máquina  
-4- Adicione a chave de API enviada (Va no Utils.java dentro em Bot/src/util/  e cole a chave na apiToken)
+4- Adicione a chave de API enviada (Va no Utils.java dentro em Bot/src/main/java/com/base/util  e cole a chave na apiToken)
 5- Instale o Apache Maven para rodar o programa  
   
 # COMPILANDO  
