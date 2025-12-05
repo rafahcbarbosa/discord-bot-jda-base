@@ -37,7 +37,7 @@ public class EmployeeMeetingDAO {
         return arqEmployeeMeeting.delete(id);
     }
 
-    // Search by foreign keys ↓↓↓
+    
 
     public static ArrayList<EmployeeMeeting> searchByEmployee(int EmployeeId) throws Exception {
         return arqEmployeeMeeting.searchByFK(EmployeeId);
@@ -62,7 +62,7 @@ public class EmployeeMeetingDAO {
     }
 
     public static ArrayList<EmployeeMeeting> getAll() throws Exception {
-        // chama diretamente o método do Arquivo que já retorna ArrayList<EmployeeMeeting>
+        
         return arqEmployeeMeeting.getAll();
     }
 

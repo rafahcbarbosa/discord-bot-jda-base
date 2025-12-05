@@ -39,24 +39,24 @@ public class MeetingDAO {
     }
 
     public static ArrayList<Meeting> searchByFK(int fkValue) throws Exception {
-        // chama diretamente o método do Arquivo que já retorna ArrayList<Meeting>
+       
         return arqMeetings.searchByFK(fkValue);
     }
 
     public static ArrayList<Meeting> searchByName(String fkValue) throws Exception {
-        // chama diretamente o método do Arquivo que já retorna ArrayList<Meeting>
+       
         return arqMeetings.searchByString(fkValue);
     }
 
     public static ArrayList<Meeting> getAll() throws Exception {
-        // chama diretamente o método do Arquivo que já retorna ArrayList<Meeting>
+    
         return arqMeetings.getAll();
     }
 
     
 
     public static String fileToString() throws Exception {
-        // chama diretamente o método do Arquivo que já retorna ArrayList<Meeting>
+       
         ArrayList<Meeting> meetings = arqMeetings.getAll();
         String total = "Meeting";
 

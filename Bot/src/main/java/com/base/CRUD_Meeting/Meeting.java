@@ -13,7 +13,7 @@ import com.base.interfaces.Registro;
 
 public class Meeting implements Registro {
 
-    // Arquivo e índice B+ compartilhados entre todas as instâncias
+ 
 
     private int id;
     private String name;

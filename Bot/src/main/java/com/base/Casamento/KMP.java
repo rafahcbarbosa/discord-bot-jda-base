@@ -6,12 +6,12 @@ import com.base.CRUD_Meeting.Meeting;
 
 public class KMP {
 
-    // Public method to search pattern in all Meeting descriptions
+    
     public static ArrayList<Meeting> check(ArrayList<Meeting> arrayListMeeting, String pattern) {
 
         ArrayList<Meeting> arrayListMeetingPattern = new ArrayList<>();
 
-        // Edge cases
+        
         if(arrayListMeeting == null){
             return arrayListMeetingPattern;
         }
@@ -20,10 +20,10 @@ public class KMP {
             return arrayListMeetingPattern;
         }
 
-        // Build LPS array (Longest Prefix Suffix)
+       
         int[] lps = buildLPS(pattern);
 
-        // Check each Meeting description
+        
         for(Meeting meeting : arrayListMeeting){
 
             String description = meeting.getDescription();
@@ -41,29 +41,29 @@ public class KMP {
     }
 
 
-    // KMP Search for a single text
+    
     private static boolean kmpSearch(String text, String pattern, int[] lps){
 
-        int i = 0; // index for text
-        int j = 0; // index for pattern
+        int i = 0; 
+        int j = 0; 
 
         int textLength = text.length();
         int patternLength = pattern.length();
 
         while(i < textLength){
 
-            // Characters match
+         
             if(text.charAt(i) == pattern.charAt(j)){
                 i++;
                 j++;
 
-                // Found the full pattern
+                
                 if(j == patternLength){
                     return true;
                 }
             }
 
-            // Mismatch
+           
             else{
 
                 if(j != 0){
@@ -74,12 +74,12 @@ public class KMP {
             }
         }
 
-        // Pattern not found
+        
         return false;
     }
 
 
-    // Build the LPS array
+
     private static int[] buildLPS(String pattern){
 
         int length = pattern.length();
@@ -88,7 +88,7 @@ public class KMP {
         int i = 1;
         int len = 0;
 
-        // lps[0] is always zero
+      
         lps[0] = 0;
 
         while(i < length){

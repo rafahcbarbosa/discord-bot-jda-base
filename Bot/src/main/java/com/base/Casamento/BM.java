@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.base.CRUD_Meeting.Meeting;
 public class BM {
 
-    // Public method to search pattern in all Meeting descriptions
+    
     public static ArrayList<Meeting> check(ArrayList<Meeting> arrayListMeeting, String pattern) {
 
         ArrayList<Meeting> arrayListMeetingPattern = new ArrayList<>();
@@ -19,10 +19,10 @@ public class BM {
             return arrayListMeetingPattern;
         }
 
-        // Build bad character table
+       
         int[] badChar = buildBadCharTable(pattern);
 
-        // Check each meeting description
+  
         for(Meeting meeting : arrayListMeeting){
 
             String description = meeting.getDescription();
@@ -40,7 +40,7 @@ public class BM {
     }
 
 
-    // Boyer-Moore Search using Bad Character Rule
+  
     private static boolean bmSearch(String text, String pattern, int[] badChar){
 
         int textLength = text.length();
@@ -52,17 +52,16 @@ public class BM {
 
             int j = patternLength - 1;
 
-            // Compare characters from end to beginning
+            
             while(j >= 0 && pattern.charAt(j) == text.charAt(shift + j)){
                 j--;
             }
 
-            // Pattern found
+          
             if(j < 0){
                 return true;
             }
 
-            // Bad character mismatch -> use badChar table to decide shift
             int charIndex = text.charAt(shift + j);
             int badIndex = badChar[charIndex];
 
@@ -79,7 +78,7 @@ public class BM {
     }
 
 
-    // Build Bad Character Table for pattern
+    
     private static int[] buildBadCharTable(String pattern){
 
         int[] badChar = new int[256];
