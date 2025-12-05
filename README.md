@@ -4,11 +4,11 @@
 1- Crie uma conta no discord (https://discord.com/)  
 2- Entre no servidor de testes (https://discord.gg/2TymcAfaVK)  
 3- Baixe o código na sua máquina  
-4- Adicione a chave de API enviada (se você não possui a chave de API, não é para você testar o bot :P)  
+4- Adicione a chave de API enviada (Va no Utils.java dentro em Bot/src/util/  e cole a chave na apiToken)
 5- Instale o Apache Maven para rodar o programa  
   
 # COMPILANDO  
-IMPORTANTE: Abra o CMD no diretório "discord-bot-jda-base\V3 (AEDS3)\Bot"  
+IMPORTANTE: Abra o CMD no diretório "discord-bot-jda-base\Bot"  
 * mvn clean install (quando der algum problema)  
 * mvn compile exec:java (para executar o programa)  
 * ctrl + c (encerrar a execução do bot)  
